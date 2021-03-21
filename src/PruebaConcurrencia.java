@@ -2,11 +2,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -14,7 +17,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-class Concurrencia extends JFrame{
+class Concurrencia extends JFrame implements ActionListener{
+	
+	JTextArea indicesSi, indicesNo, numConteoSi, numConteoNo, numPorcentajeSi, numPorcentajeNo;
+	JProgressBar pgsBar;
 	
 	public Concurrencia(){
 		
@@ -51,17 +57,17 @@ class Concurrencia extends JFrame{
 		conteoNo.setBounds(290, 75, 90, 25);
 		add(conteoNo);
 		
-		JTextArea numConteoSi = new JTextArea();
+		numConteoSi = new JTextArea();
 		numConteoSi.setEditable(false);
 		numConteoSi.setBounds(90,79,100,25);
 		add(numConteoSi);
 		
-		JTextArea numConteoNo = new JTextArea();
+		numConteoNo = new JTextArea();
 		numConteoNo.setEditable(false);
 		numConteoNo.setBounds(340,79,100,25);
 		add(numConteoNo);
 		
-		JTextArea indicesSi = new JTextArea();
+		indicesSi = new JTextArea();
 		indicesSi.setEditable(false);
 		indicesSi.setLineWrap(true);
 		indicesSi.setWrapStyleWord(true);
@@ -70,7 +76,7 @@ class Concurrencia extends JFrame{
 	    scrollSi.setBounds(42,120,210,320);
 	    add(scrollSi);
 	    
-	    JTextArea indicesNo = new JTextArea();
+	    indicesNo = new JTextArea();
 		indicesNo.setEditable(false);
 		indicesNo.setLineWrap(true);
 		indicesNo.setWrapStyleWord(true);
@@ -79,11 +85,44 @@ class Concurrencia extends JFrame{
 	    scrollNo.setBounds(290,120,210,320);
 	    add(scrollNo);
 	    
+	    pgsBar = new JProgressBar();
+	    pgsBar.setBounds(520, 20, 245, 55);
+	    add(pgsBar);
+	    pgsBar.setValue(0);
+	    pgsBar.setStringPainted(true);
 	    
+	    JLabel porcentajeSi = new JLabel("Porcentaje Si:");
+	    porcentajeSi.setBounds(530, 100, 150, 25);
+	    add(porcentajeSi);
+	    
+	    JLabel porcentajeNo = new JLabel("Porcentaje No:");
+	    porcentajeNo.setBounds(530, 165, 150, 25);
+	    add(porcentajeNo);
+	    
+	    numPorcentajeSi = new JTextArea();
+	    numPorcentajeSi.setEditable(false);
+	    numPorcentajeSi.setBounds(640,100,100,25);
+		add(numPorcentajeSi);
+		
+		numPorcentajeNo = new JTextArea();
+	    numPorcentajeNo.setEditable(false);
+	    numPorcentajeNo.setBounds(640,165,100,25);
+		add(numPorcentajeNo);
+		
 	    
 	}
-	
 
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 
 }
 
