@@ -35,8 +35,7 @@ class Concurrencia extends JFrame implements ActionListener{
 		
 		datos = new ArrayList<String>();//generación datos
 		for (int i = 0; i < 10000000; i++) {
-			int x = (int)(Math.round(Math.random()));
-			if (x==0) {
+			if ((int)(Math.round(Math.random()))==0) {
 				datos.add("No");
 			}else {
 				datos.add("Si");
@@ -116,26 +115,29 @@ class Concurrencia extends JFrame implements ActionListener{
 		start.addActionListener(this);
 		add(start);
 	    
-	}
+	}//Constructor
 	
 	class MostrarDatos extends Thread{
 		
 		public void run() {
+			String x="",y="";
 			for (int i = 0; i <datos.size(); i++) {
-				if (datos.get(i)=="Si") {
-					indicesSi.append(String.valueOf(i)+"\n");
+				if (datos.get(i).contains("Si")) {
+					x+=(i+"\n");
 				}else {
-					indicesNo.append(String.valueOf(i)+"\n");
+					y+=(i+"\n");
 				}
-				
+				if ((i+1)%100000==0) {
+					indicesSi.append(x);
+					indicesNo.append(y);
+					x="";
+					y="";
+				}
 			}
-			
 			
 		}
 		
-		
-		
-	}
+	}//class MostrarDatos
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -144,15 +146,9 @@ class Concurrencia extends JFrame implements ActionListener{
 			md.start();
 		}
 		
-	}
-	
-	
-	
-	
-	
-	
+	}//actionPerformed
 
-}
+}// class Concurrencia
 
 
 public class PruebaConcurrencia {
