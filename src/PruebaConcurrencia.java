@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -18,7 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 class Concurrencia extends JFrame implements ActionListener{
-	
+	ArrayList<String> datos = new ArrayList<String>();
+	JButton start;
 	JTextArea indicesSi, indicesNo, numConteoSi, numConteoNo, numPorcentajeSi, numPorcentajeNo;
 	JProgressBar pgsBar;
 	
@@ -31,7 +33,7 @@ class Concurrencia extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
-		ArrayList<String> datos = new ArrayList<String>();//generación datos
+		datos = new ArrayList<String>();//generación datos
 		for (int i = 0; i < 10000000; i++) {
 			int x = (int)(Math.round(Math.random()));
 			if (x==0) {
@@ -109,12 +111,38 @@ class Concurrencia extends JFrame implements ActionListener{
 	    numPorcentajeNo.setBounds(640,165,100,25);
 		add(numPorcentajeNo);
 		
+		start = new JButton("Iniciar");
+		start.setBounds(630,250,145,40);
+		start.addActionListener(this);
+		add(start);
 	    
+	}
+	
+	class MostrarDatos extends Thread{
+		
+		public void run() {
+			for (int i = 0; i <datos.size(); i++) {
+				if (datos.get(i)=="Si") {
+					indicesSi.append(String.valueOf(i)+"\n");
+				}else {
+					indicesNo.append(String.valueOf(i)+"\n");
+				}
+				
+			}
+			
+			
+		}
+		
+		
+		
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==start) {
+			MostrarDatos md = new MostrarDatos();
+			md.start();
+		}
 		
 	}
 	
