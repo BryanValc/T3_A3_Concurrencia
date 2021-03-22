@@ -34,9 +34,9 @@ class Concurrencia extends JFrame implements ActionListener{
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
-		datos = new ArrayList<String>();//generación datos
-		for (int i = 0; i < 10000000; i++) {
-			if ((int)(Math.round(Math.random()))==0) {
+		datos = new ArrayList<String>();//instancia datos
+		for (int i = 0; i < 10000000; i++) {//generacion datos
+			if ((int)(Math.round(Math.random()))==0) {//importante usar round porque sino salen casi puros ceros
 				datos.add("No");
 			}else {
 				datos.add("Si");
@@ -59,17 +59,17 @@ class Concurrencia extends JFrame implements ActionListener{
 		conteoNo.setBounds(290, 75, 90, 25);
 		add(conteoNo);
 		
-		numConteoSi = new JTextArea();
+		numConteoSi = new JTextArea();//cantidad de Si
 		numConteoSi.setEditable(false);
 		numConteoSi.setBounds(90,79,100,25);
 		add(numConteoSi);
 		
-		numConteoNo = new JTextArea();
+		numConteoNo = new JTextArea();//Cantidad de No
 		numConteoNo.setEditable(false);
 		numConteoNo.setBounds(340,79,100,25);
 		add(numConteoNo);
 		
-		indicesSi = new JTextArea();
+		indicesSi = new JTextArea();//area de texto indices Si
 		indicesSi.setEditable(false);
 		indicesSi.setLineWrap(true);
 		indicesSi.setWrapStyleWord(true);
@@ -78,7 +78,7 @@ class Concurrencia extends JFrame implements ActionListener{
 	    scrollSi.setBounds(42,120,210,320);
 	    add(scrollSi);
 	    
-	    indicesNo = new JTextArea();
+	    indicesNo = new JTextArea();//area de texto indides No
 		indicesNo.setEditable(false);
 		indicesNo.setLineWrap(true);
 		indicesNo.setWrapStyleWord(true);
@@ -87,19 +87,19 @@ class Concurrencia extends JFrame implements ActionListener{
 	    scrollNo.setBounds(290,120,210,320);
 	    add(scrollNo);
 	    
-	    pgsBar = new JProgressBar();
+	    pgsBar = new JProgressBar();//Barra de progreso
 	    pgsBar.setBounds(520, 20, 245, 55);
 	    add(pgsBar);
 	    pgsBar.setValue(0);
 	    pgsBar.setStringPainted(true);
 	    
-	    siBar = new JProgressBar();
+	    siBar = new JProgressBar();//Histograma Si
 	    siBar.setBounds(520, 170, 245, 40);
 	    add(siBar);
 	    siBar.setValue(0);
 	    siBar.setStringPainted(true);
 	    
-	    noBar = new JProgressBar();
+	    noBar = new JProgressBar();//Histograma No
 	    noBar.setBounds(520, 210, 245, 40);
 	    add(noBar);
 	    noBar.setValue(0);
@@ -113,12 +113,12 @@ class Concurrencia extends JFrame implements ActionListener{
 	    porcentajeNo.setBounds(530, 135, 150, 25);
 	    add(porcentajeNo);
 	    
-	    numPorcentajeSi = new JTextArea();
+	    numPorcentajeSi = new JTextArea();//porcentaje Si en pantalla
 	    numPorcentajeSi.setEditable(false);
 	    numPorcentajeSi.setBounds(640,100,100,25);
 		add(numPorcentajeSi);
 		
-		numPorcentajeNo = new JTextArea();
+		numPorcentajeNo = new JTextArea();//porcentaje No en pantalla
 	    numPorcentajeNo.setEditable(false);
 	    numPorcentajeNo.setBounds(640,135,100,25);
 		add(numPorcentajeNo);
@@ -131,21 +131,26 @@ class Concurrencia extends JFrame implements ActionListener{
 	}//Constructor
 	
 	class MostrarDatos extends Thread{
+		ArrayList<String> dts = new ArrayList<String>();
+		
+		public MostrarDatos(ArrayList<String> dts) {
+			this.dts = dts;
+		}
 		
 		public void run() {
-			int sz = datos.size();
+			int sz = dts.size();
 			int szc = sz/100;
-			String x="",y="";
+			String x="",y="";//Son cadenas que después van a las cajas de texto
 			for (int i = 0; i <sz; i++) {
-				if (datos.get(i)=="Si") {
+				if (dts.get(i)=="Si") {//Decide a que cadena asignar el indice
 					x+=(i+"\n");
 				}else {
 					y+=(i+"\n");
 				}
-				if ((i+1)%szc==0) {
+				if ((i+1)%szc==0) {//Pasa los indices a las cajas de texto solo cuando son n/100 elementos
 					indicesSi.append(x);
 					indicesNo.append(y);
-					x="";
+					x="";//limpia las cadenas
 					y="";
 				}
 			}
@@ -164,25 +169,26 @@ class Concurrencia extends JFrame implements ActionListener{
 			df.setMinimumFractionDigits(2);
 			
 			while(i<100) {
-				int iSi = indicesSi.getLineCount();
+				int iSi = indicesSi.getLineCount();//consigue la cantidad de lineas de las cajas de texto
 				int iNo = indicesNo.getLineCount();
-				if ((iSi+iNo)>=((i+1)*szc)) {
+				if ((iSi+iNo)>=((i+1)*szc)) {//verifica si se introdujeron más lineas
 					i+=1;
-					pgsBar.setValue(i);
-					numConteoSi.setText(""+(iSi-1));
+					
+					numConteoSi.setText(""+(iSi-1));//cambia el conteo
 					numConteoNo.setText(""+(iNo-1));
 					
-					double pSi = (double)iSi/((double)iSi+(double)iNo);
+					double pSi = (double)iSi/((double)iSi+(double)iNo);//cambia porcentajes de Si y No
 					double pNo = 1-pSi;
+					numPorcentajeSi.setText(df.format(pSi));
+					numPorcentajeNo.setText(df.format(pNo));
 					
+					pgsBar.setValue(i);//cambia los progress bar
 					siBar.setValue((int)(pSi*100));
 					noBar.setValue((int)(pNo*100));
 					
-					numPorcentajeSi.setText(df.format(pSi));
-					numPorcentajeNo.setText(df.format(pNo));
 				}
 				try {
-					currentThread().sleep(1000);
+					currentThread().sleep(1000);//un delay para no hacer uso excesivo del núcleo
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -192,10 +198,22 @@ class Concurrencia extends JFrame implements ActionListener{
 	}//class MostrarDatos
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {//ejecuta MostrarDatos e Histograma
 		if (e.getSource()==start) {
-			MostrarDatos md = new MostrarDatos();
-			md.start();
+			
+			Runtime runtime = Runtime.getRuntime();
+			int ap = runtime.availableProcessors()-1;
+			
+			while(datos.size()%ap!=0) {
+				ap-=1;
+			}
+			for (int i = 0; i < ap; i++) {
+				ArrayList<String> dts;
+				dts = new ArrayList<String>(datos.subList((i)*(datos.size()/ap), ((i+1))*(datos.size()/ap)));
+				
+				MostrarDatos md = new MostrarDatos(dts);
+				md.start();	
+			}
 			Histograma hg = new Histograma();
 			hg.start();
 		}
